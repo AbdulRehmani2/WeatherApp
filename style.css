@@ -62,7 +62,7 @@ body{
     background-color: white;
     width: 18.9rem;
     border-radius: 5px;
-    padding: 0.3rem 0rem;
+    padding: 0rem 0rem;
 }
 
 .search-result{
@@ -71,6 +71,20 @@ body{
     color: black;
     font-size: large;
     border-bottom: 1px solid rgb(207, 207, 207);
+    padding: 0.3rem 1rem;
+}
+
+.search-result:hover{
+    background: linear-gradient(to left, rgb(3, 3, 153), rgb(0, 172, 219));
+    cursor: pointer;
+    color: white;
+}
+
+.search-error{
+    list-style: none;
+    height: 1.4rem;
+    color: black;
+    font-size: large;
     padding: 0.3rem 1rem;
 }
 
