@@ -91,3 +91,88 @@ body{
 .search-result:last-child{
     border: none;
 }
+
+.weather-card{
+
+}
+
+.weather-info-container{
+    display: flex;
+    align-items: center;
+}
+
+.weather-temp-info > h2{
+    font-size: 3rem;
+    margin: 0.3rem 0;
+}
+
+.weather-temp-info > p{
+    font-size: 1.5rem;
+    margin: 0.3rem 0rem;
+}
+
+.weather-location-info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.weather-location-info>img{
+    width: 2rem;
+    height: 2.2rem;
+    margin: 0rem 0.6rem;
+}
+
+.weather-info-card{
+    display: flex;
+    align-items: center;
+    margin: 0rem 0.5rem;
+}
+
+.weather-info-card > img{
+    width: 2rem;
+    height: 2.2rem;
+    margin: 0rem 0.6rem;
+}
+
+.weather-info-card > div > h3{
+    margin: 0rem 0rem;
+}
+
+.weather-info-card > div > p{
+    margin: 0rem 0rem;
+}
+
+.weather-cards{
+    display: flex;
+}
+
+.sprite-container{
+    width: 132px;
+    height: 117px;
+}
+
+.icon{
+    width: 132px;
+    height: 117px;
+}
+
+.icon1 { background: url('./assests/icons.png') 0 0; }
+.icon2 { background: url('./assests/icons.png') -132.5px 0; }
+.icon3 { background: url('./assests/icons.png') -265px 0; }
+.icon4 { background: url('./assests/icons.png') -397.5px 0; }
+
+.icon5 { background: url('./assests/icons.png') 0 -117.75px; }
+.icon6 { background: url('./assests/icons.png') -132.5px -117.75px; }
+.icon7 { background: url('./assests/icons.png') -265px -117.75px; }
+.icon8 { background: url('./assests/icons.png') -397.5px -117.75px; }
+
+.icon9 { background: url('./assests/icons.png') 0 -235.5px; }
+.icon10 { background: url('./assests/icons.png') -132.5px -235.5px; }
+.icon11 { background: url('./assests/icons.png') -265px -235.5px; }
+.icon12 { background: url('./assests/icons.png') -397.5px -235.5px; }
+
+.icon13 { background: url('./assests/icons.png') 0 -353.25px; }
+.icon14 { background: url('./assests/icons.png') -132.5px -353.25px; }
+.icon15 { background: url('./assests/icons.png') -265px -353.25px; }
+.icon16 { background: url('./assests/icons.png') -397.5px -353.25px; }
