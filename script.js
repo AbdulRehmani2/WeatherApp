@@ -1,20 +1,24 @@
-let input = document.querySelector('.search-input');
-let result = document.querySelector('.search-results');
-result.style.display = 'none';
+const input = document.querySelector('.search-input');
+const result = document.querySelector('.search-results');
+const weather = document.querySelector('.weather-card')
+const weatherInfo = document.querySelector('.weather-card-container')
+
+result.classList.add('hide');
+hideWeather();
 
 input.addEventListener('keyup', (e) => {
-    let value = e.target.value.toLowerCase();
-    console.log(value);
+    const value = e.target.value.toLowerCase();
     result.innerHTML = "";
-    result.style.display = 'block';
+    result.classList.remove('hide');
+
     if(e.key == 'Enter')
     {
         input.value = "";
     }
+
     if(value == 'dublin')
     {
         let list = createList(cityData);
-        // console.log(list)
         for(let i = 0; i < list.length; i++)
         {
             result.appendChild(list[i]); 
@@ -22,14 +26,14 @@ input.addEventListener('keyup', (e) => {
     }
     else if(value == '')
     {
-        result.style.display = 'none';
+        result.classList.add('hide');
     }
     else
     {
-        let error = createLi("Invalid city name. Please try again!", "search-error");        error.style.color = 'red';
+        const error = createLi("Invalid city name. Please try again!", "search-error");        
+        error.classList.add('error');
+        hideWeather();
         result.appendChild(error);
-        document.querySelector('.weather-card').innerHTML = "";
-        document.querySelector('.weather-card-container').innerHTML = "";
     }
     
 })
@@ -37,101 +41,99 @@ input.addEventListener('keyup', (e) => {
 result.addEventListener('click', (e) => {
     if(e.target.classList.contains('search-result'))
     {
-        cityData.map(element => {
-            if(element.name == e.target.innerText)
-            {
-                result.style.display = 'none';
-                renderElement(element);
-            }
-        })
+        let element = cityData.filter((element) => element.name == e.target.innerText)[0];
+        result.classList.add('hide');
+        resetUI();
+        loadElement(element);
     }
 })
 
-function renderElement(element)
+function resetUI()
 {
-    let weatherInfo = createWeatherContainer(element.icon, element.temperature, element.weather);
-    let weatherTitle = createWeatherTitle(element.name);
-    let card1 = createWeatherCard('./assests/humidity.png', 'humidity', element.humidity);
-    let card2 = createWeatherCard('./assests/temperature.png', 'temperature', element.temperature);
-    let card3 = createWeatherCard('./assests/wind.png', 'wind', element.windspeed);
-    let div = document.createElement('div');
-    div.classList.add("weather-cards");
-    document.querySelector('.weather-card').appendChild(weatherInfo);
-    document.querySelector('.weather-card-container').appendChild(weatherTitle);
-    div.appendChild(card1);
-    div.appendChild(card2);
-    div.appendChild(card3);
-    document.querySelector('.weather-card-container').appendChild(div);
+    document.querySelector('.weather-cards').innerHTML = '';
+    document.querySelector('.sprite-container>div').classList = ['icon'];
 }
 
-function createWeatherContainer(iconNumber, temp, weather)
+function loadElement(element)
 {
-    let mainDiv = document.createElement('div');
-    mainDiv.classList.add('weather-info-container')
-    let sprite = document.createElement('div');
-    sprite.classList.add('sprite-container')
-    let icon = document.createElement('div');
-    icon.classList.add(iconNumber)
-    icon.classList.add('icon')
-    let tempInfo = document.createElement('div');
-    tempInfo.classList.add('weather-temp-info');
-    let tem = document.createElement('h2');
-    tem.innerText = temp;
-    let wthr = document.createElement('p');
-    wthr.innerText = weather;
-    tempInfo.appendChild(tem);
-    tempInfo.appendChild(wthr);
-    sprite.appendChild(icon);
-    mainDiv.appendChild(sprite);
-    mainDiv.appendChild(tempInfo);
-    return mainDiv;
+    showWeather();
+    const icon = document.querySelector('.icon');
+    icon.classList.add(element.icon);
+
+    const temp = document.querySelector('.weather-temp-info>h2');
+    temp.innerText = element.temperature;
+
+    const status = document.querySelector('.weather-temp-info>p');
+    status.innerText = element.weather;
+
+    const img = document.querySelector('.weather-location-info>img');
+    img.src = './assets/location.png';
+
+    const title = document.querySelector('.weather-location-info>h1');
+    title.innerText = element.name;
+
+    const div = document.querySelector('.weather-cards');
+
+    const humidityCard = createWeatherCard('./assets/humidity.png', 'humidity', element.humidity);
+    div.appendChild(humidityCard);
+
+    const temperatureCard = createWeatherCard('./assets/temperature.png', 'temperature', element.temperature);
+    div.appendChild(temperatureCard);
+    
+    const windCard = createWeatherCard('./assets/wind.png', 'wind', element.windspeed);
+    div.appendChild(windCard);
 }
 
-function createWeatherTitle(name)
+function showWeather()
 {
-    let mainDiv = document.createElement('div');
-    mainDiv.classList.add('weather-location-info');
-    let image = document.createElement('img');
-    image.src = './assests/location.png';
-    let title = document.createElement('h1');
-    title.innerText = name;
-    mainDiv.appendChild(image);
-    mainDiv.appendChild(title);
-    return mainDiv;
+    weather.classList.remove('hide');
+    weatherInfo.classList.remove('hide');
+}
+
+function hideWeather()
+{
+    weather.classList.add('hide');
+    weatherInfo.classList.add('hide');
 }
 
 function createWeatherCard(image, value, item)
 {
-    let mainDiv = document.createElement('div');
+    const mainDiv = document.createElement('div');
     mainDiv.classList.add('weather-info-card');
-    let img = document.createElement('img');
+
+    const img = document.createElement('img');
     img.src = image;
-    let subDiv = document.createElement('div');
-    let val = document.createElement('h3');
+
+    const subDiv = document.createElement('div');
+
+    const val = document.createElement('h3');
     val.innerText = value;
-    let it = document.createElement('p');
+
+    const it = document.createElement('p');
     it.innerText = item;
+
     subDiv.appendChild(val);
     subDiv.appendChild(it);
     mainDiv.appendChild(img);
     mainDiv.appendChild(subDiv);
+
     return mainDiv;
 }
 
-let cityData = [{name:"Dublin, IE", temperature:'12°C', humidity:'85%', feelslike:'12°C', windspeed:'18km/h', weather:'clear', icon:'icon1'},
-{name:"Dublin, California, US", temperature:'15°C', humidity:'83%', feelslike:'16°C', windspeed:'12km/h', weather:'clear', icon:'icon2'},
-{name:"Dublin, Georgia, US", temperature:'10°C', humidity:'65%', feelslike:'9°C', windspeed:'15km/h', weather:'clear', icon:'icon3'},
-{name:"Dublin, Texas, US", temperature:'12°C', humidity:'45%', feelslike:'11°C', windspeed:'21km/h', weather:'clear', icon:'icon4'},
-{name:"Dublin, Ohio, US", temperature:'20°C', humidity:'75%', feelslike:'20°C', windspeed:'11km/h', weather:'clear', icon:'icon5'}
-]
-
 function createLi(cityName, className)
 {
-    let li = document.createElement('li');
+    const li = document.createElement('li');
     li.classList.add(className);
     li.innerHTML = cityName;
     return li;
 }
+
+const cityData = [{name:"Dublin, IE", temperature:'12°C', humidity:'85%', feelslike:'12°C', windspeed:'18km/h', weather:'clear', icon:'icon-clear-day'},
+{name:"Dublin, California, US", temperature:'15°C', humidity:'83%', feelslike:'16°C', windspeed:'12km/h', weather:'clear', icon:'icon-rainy-day'},
+{name:"Dublin, Georgia, US", temperature:'10°C', humidity:'65%', feelslike:'9°C', windspeed:'15km/h', weather:'clear', icon:'icon-clear-night'},
+{name:"Dublin, Texas, US", temperature:'12°C', humidity:'45%', feelslike:'11°C', windspeed:'21km/h', weather:'clear', icon:'icon-rainy-night'},
+{name:"Dublin, Ohio, US", temperature:'20°C', humidity:'75%', feelslike:'20°C', windspeed:'11km/h', weather:'clear', icon:'icon-cloudy'}
+]
 
 function createList(cityData)
 {
@@ -140,6 +142,5 @@ function createList(cityData)
     {
         list.push(createLi(cityData[i].name, 'search-result')); 
     }
-    // console.log(list);
     return list;
 }
