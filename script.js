@@ -3,50 +3,112 @@ const result = document.querySelector('.search-results');
 const weather = document.querySelector('.weather-card')
 const weatherInfo = document.querySelector('.weather-card-container')
 
+const myAPIkey = "4201aad943feb7c50d1cb5ad0de0ca52";
+
 result.classList.add('hide');
 hideWeather();
 
 input.addEventListener('keyup', (e) => {
     const value = e.target.value.toLowerCase();
-    result.innerHTML = "";
-    result.classList.remove('hide');
-
+    // result.innerHTML = "";
+    // result.classList.remove('hide');
+    // if(e.key == 'Enter')
+    // {
+    //     searchData();
+    // }
+    // if(value == '')
+    // {
+    //     result.classList.add('hide');
+    // }
+    if(value == "")
+    {
+        clearChildren();
+        return;
+    }
     if(e.key == 'Enter')
     {
-        input.value = "";
+        parsedData = [];
+        result.classList.remove('hide');
+        let coordData = getCoordinates(value,  createList);
     }
+});
 
-    if(value == 'dublin')
+function showError()
+{
+    const error = createLi("Invalid city name. Please try again!", "search-error");        
+    error.classList.add('error');
+    hideWeather();
+    result.appendChild(error);
+}
+
+// async function searchData()
+// {
+//     const cityName = input.value;
+//     let data = await getCoordinates(cityName);
+//     let list = createList(data);
+//     input.value = "";
+//     clearChildren();
+//     if(result.childNodes.length == 0)
+//     {
+//         const error = createLi("Invalid city name. Please try again!", "search-error");        
+//         error.classList.add('error');
+//         hideWeather();
+//         result.appendChild(error);
+//     } 
+// }
+
+function clearChildren()
+{
+    while(result.firstChild)
     {
-        let list = createList(cityData);
-        for(let i = 0; i < list.length; i++)
-        {
-            result.appendChild(list[i]); 
-        }
+        result.removeChild(result.firstChild);
     }
-    else if(value == '')
-    {
-        result.classList.add('hide');
-    }
-    else
-    {
-        const error = createLi("Invalid city name. Please try again!", "search-error");        
-        error.classList.add('error');
-        hideWeather();
-        result.appendChild(error);
-    }
-    
-})
+}
+
+function getCoordinates(cityName, callback)
+{
+    clearChildren();
+    if(cityName == "") return;
+    const limit = 5;
+    const url = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=${limit}&appid=${myAPIkey}`
+    fetch(url).then(res => res.json()).then(data => {
+        let cities = parseData(data);
+        callback(cities);
+        cities.length == 0 && showError();
+        return cities;
+    });
+}
+
+let parsedData = [];
+
+function parseData(resultData)
+{
+    parsedData = [];
+    resultData.map(i => {
+        let name = `${i.name}, ${i.state}, ${i.country}`;
+        name.includes('undefined') == false && parsedData.push({name:name, lat:i.lat, lon:i.lon});
+    });
+    return parsedData;
+}
 
 result.addEventListener('click', (e) => {
     if(e.target.classList.contains('search-result'))
     {
-        let element = cityData.filter((element) => element.name == e.target.innerText)[0];
+        let element = parsedData.filter((element) => element.name == e.target.innerText)[0];
         result.classList.add('hide');
         resetUI();
-        loadElement(element);
+        console.log(element);
+        getWeather(element);
     }
 })
+
+// function getWeather(element)
+// {
+//     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${element.lat}&lon=${element.lon}&appid=${myAPIkey}`
+//     fetch(url).then(res => res.json()).then(data => {
+//         console.log(element, data.main.feelslike, data.main.temp, data.main.humidity, data.main.);
+//     })
+// }
 
 function resetUI()
 {
@@ -137,10 +199,8 @@ const cityData = [{name:"Dublin, IE", temperature:'12°C', humidity:'85%', feels
 
 function createList(cityData)
 {
-    let list = [];
-    for(let i = 0; i < cityData.length; i++)
+    for(let i = 0; i < cityData.length & i < 5; i++)
     {
-        list.push(createLi(cityData[i].name, 'search-result')); 
+        result.appendChild(createLi(cityData[i].name, 'search-result')); 
     }
-    return list;
 }
