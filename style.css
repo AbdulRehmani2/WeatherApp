@@ -160,12 +160,12 @@ body{
 .icon-snowing { background: url('./assets/icons.png') -265px -117.75px; }
 .icon-hot { background: url('./assets/icons.png') -397.5px -117.75px; }
 
-.icon-tornado { background: url('./assets/icons.png') 0 -235.5px; }
+.icon-mist { background: url('./assets/icons.png') 0 -235.5px; }
 .icon-cloudy-day { background: url('./assets/icons.png') -132.5px -235.5px; }
 .icon-snow { background: url('./assets/icons.png') -265px -235.5px; }
 .icon-rain { background: url('./assets/icons.png') -397.5px -235.5px; }
 
 .icon-rainy-thunderstorm { background: url('./assets/icons.png') 0 -353.25px; }
-.icon-windy { background: url('./assets/icons.png') -132.5px -353.25px; }
+.icon-tornado { background: url('./assets/icons.png') -132.5px -353.25px; }
 .icon-rain-snow { background: url('./assets/icons.png') -265px -353.25px; }
 .icon-thunderstorm { background: url('./assets/icons.png') -397.5px -353.25px; }

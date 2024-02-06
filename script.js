@@ -10,16 +10,6 @@ hideWeather();
 
 input.addEventListener('keyup', (e) => {
     const value = e.target.value.toLowerCase();
-    // result.innerHTML = "";
-    // result.classList.remove('hide');
-    // if(e.key == 'Enter')
-    // {
-    //     searchData();
-    // }
-    // if(value == '')
-    // {
-    //     result.classList.add('hide');
-    // }
     if(value == "")
     {
         clearChildren();
@@ -28,8 +18,9 @@ input.addEventListener('keyup', (e) => {
     if(e.key == 'Enter')
     {
         parsedData = [];
+        hideWeather();
         result.classList.remove('hide');
-        let coordData = getCoordinates(value,  createList);
+        getCoordinates(value,  createList);
     }
 });
 
@@ -40,22 +31,6 @@ function showError()
     hideWeather();
     result.appendChild(error);
 }
-
-// async function searchData()
-// {
-//     const cityName = input.value;
-//     let data = await getCoordinates(cityName);
-//     let list = createList(data);
-//     input.value = "";
-//     clearChildren();
-//     if(result.childNodes.length == 0)
-//     {
-//         const error = createLi("Invalid city name. Please try again!", "search-error");        
-//         error.classList.add('error');
-//         hideWeather();
-//         result.appendChild(error);
-//     } 
-// }
 
 function clearChildren()
 {
@@ -75,7 +50,6 @@ function getCoordinates(cityName, callback)
         let cities = parseData(data);
         callback(cities);
         cities.length == 0 && showError();
-        return cities;
     });
 }
 
@@ -97,18 +71,18 @@ result.addEventListener('click', (e) => {
         let element = parsedData.filter((element) => element.name == e.target.innerText)[0];
         result.classList.add('hide');
         resetUI();
-        console.log(element);
         getWeather(element);
     }
 })
 
-// function getWeather(element)
-// {
-//     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${element.lat}&lon=${element.lon}&appid=${myAPIkey}`
-//     fetch(url).then(res => res.json()).then(data => {
-//         console.log(element, data.main.feelslike, data.main.temp, data.main.humidity, data.main.);
-//     })
-// }
+function getWeather(element)
+{
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${element.lat}&lon=${element.lon}&units=metric&appid=${myAPIkey}`
+    fetch(url).then(res => res.json()).then(data => {
+        let weatherData = {temperature: data.main.temp, name: element.name, humidity:data.main.humidity, temperature:data.main.feels_like, windspeed:data.wind.speed, weather:data.weather[0].main, icon:icons[data.weather[0].icon]};
+        loadElement(weatherData);
+    })
+}
 
 function resetUI()
 {
@@ -123,7 +97,7 @@ function loadElement(element)
     icon.classList.add(element.icon);
 
     const temp = document.querySelector('.weather-temp-info>h2');
-    temp.innerText = element.temperature;
+    temp.innerText = `${element.temperature}°C`;
 
     const status = document.querySelector('.weather-temp-info>p');
     status.innerText = element.weather;
@@ -136,13 +110,13 @@ function loadElement(element)
 
     const div = document.querySelector('.weather-cards');
 
-    const humidityCard = createWeatherCard('./assets/humidity.png', 'humidity', element.humidity);
+    const humidityCard = createWeatherCard('./assets/humidity.png', 'Humidity', `${element.humidity}%`);
     div.appendChild(humidityCard);
 
-    const temperatureCard = createWeatherCard('./assets/temperature.png', 'temperature', element.temperature);
+    const temperatureCard = createWeatherCard('./assets/temperature.png', 'Feels Like', `${element.temperature}°C`);
     div.appendChild(temperatureCard);
     
-    const windCard = createWeatherCard('./assets/wind.png', 'wind', element.windspeed);
+    const windCard = createWeatherCard('./assets/wind.png', 'Wind', `${element.windspeed}m/s`);
     div.appendChild(windCard);
 }
 
@@ -190,12 +164,7 @@ function createLi(cityName, className)
     return li;
 }
 
-const cityData = [{name:"Dublin, IE", temperature:'12°C', humidity:'85%', feelslike:'12°C', windspeed:'18km/h', weather:'clear', icon:'icon-clear-day'},
-{name:"Dublin, California, US", temperature:'15°C', humidity:'83%', feelslike:'16°C', windspeed:'12km/h', weather:'clear', icon:'icon-rainy-day'},
-{name:"Dublin, Georgia, US", temperature:'10°C', humidity:'65%', feelslike:'9°C', windspeed:'15km/h', weather:'clear', icon:'icon-clear-night'},
-{name:"Dublin, Texas, US", temperature:'12°C', humidity:'45%', feelslike:'11°C', windspeed:'21km/h', weather:'clear', icon:'icon-rainy-night'},
-{name:"Dublin, Ohio, US", temperature:'20°C', humidity:'75%', feelslike:'20°C', windspeed:'11km/h', weather:'clear', icon:'icon-cloudy'}
-]
+const icons = {'01d':'icon-clear-day', '01n':'icon-clear-night', '03d':'icon-cloudy', '03n':'icon-cloudy', '02d':'icon-cloudy', '02n':'icon-cloudy', '04d':'icon-cloudy', '04n':'icon-cloudy', '09d':'icon-rain', '09n':'icon-rain', '10d':'icon-rainy-day', '10n':'icon-rainy-night', '11d':'icon-thunderstorm', '11n':'icon-thunderstorm', '13d':'icon-snow', '13n':'icon-snow', '50d':'icon-mist', '50n':'icon-mist'}
 
 function createList(cityData)
 {
