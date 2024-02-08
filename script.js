@@ -2,8 +2,28 @@ const input = document.querySelector('.search-input');
 const result = document.querySelector('.search-results');
 const weather = document.querySelector('.weather-card')
 const weatherInfo = document.querySelector('.weather-card-container')
-
 const myAPIkey = "4201aad943feb7c50d1cb5ad0de0ca52";
+// let parsedData = [];
+const icons = {'01d':'icon-clear-day', 
+'01n':'icon-clear-night', 
+'03d':'icon-cloudy', 
+'03n':'icon-cloudy', 
+'02d':'icon-cloudy', 
+'02n':'icon-cloudy', 
+'04d':'icon-cloudy', 
+'04n':'icon-cloudy', 
+'09d':'icon-rain', 
+'09n':'icon-rain', 
+'10d':'icon-rainy-day', 
+'10n':'icon-rainy-night', 
+'11d':'icon-thunderstorm', 
+'11n':'icon-thunderstorm', 
+'13d':'icon-snow', 
+'13n':'icon-snow', 
+'50d':'icon-mist', 
+'50n':'icon-mist'
+};
+
 
 result.classList.add('hide');
 hideWeather();
@@ -17,16 +37,18 @@ input.addEventListener('keyup', (e) => {
     }
     if(e.key == 'Enter')
     {
-        parsedData = [];
         hideWeather();
         result.classList.remove('hide');
-        getCoordinates(value,  createList);
+        getCoordinates(value,  createLi);
     }
 });
 
 function showError()
 {
-    const error = createLi("Invalid city name. Please try again!", "search-error");        
+    console.log(1);
+    let error = document.createElement('li');
+    error.innerText = "Invalid city name. Please try again!";
+    error.classList.add("search-error");
     error.classList.add('error');
     hideWeather();
     result.appendChild(error);
@@ -40,46 +62,44 @@ function clearChildren()
     }
 }
 
-function getCoordinates(cityName, callback)
+function getCoordinates(cityName)
 {
     clearChildren();
     if(cityName == "") return;
     const limit = 5;
     const url = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=${limit}&appid=${myAPIkey}`
     fetch(url).then(res => res.json()).then(data => {
-        let cities = parseData(data);
-        callback(cities);
-        cities.length == 0 && showError();
+        parseData(data);
+        result.firstChild == null && showError();
     });
 }
 
-let parsedData = [];
-
 function parseData(resultData)
 {
-    parsedData = [];
     resultData.map(i => {
         let name = `${i.name}, ${i.state}, ${i.country}`;
-        name.includes('undefined') == false && parsedData.push({name:name, lat:i.lat, lon:i.lon});
+        name = name.replace("undefined,", "");
+        name = name.replace(/ {2,}/g, ' ');
+        createLi(name, i.lat, i.lon, 'search-result');
     });
-    return parsedData;
 }
 
 result.addEventListener('click', (e) => {
     if(e.target.classList.contains('search-result'))
     {
-        let element = parsedData.filter((element) => element.name == e.target.innerText)[0];
         result.classList.add('hide');
         resetUI();
-        getWeather(element);
+        getWeather(e.target);
     }
 })
 
 function getWeather(element)
 {
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${element.lat}&lon=${element.lon}&units=metric&appid=${myAPIkey}`
+    let lat = element.getAttribute('data-lat');
+    let lon = element.getAttribute('data-lon');
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${myAPIkey}`
     fetch(url).then(res => res.json()).then(data => {
-        let weatherData = {temperature: data.main.temp, name: element.name, humidity:data.main.humidity, temperature:data.main.feels_like, windspeed:data.wind.speed, weather:data.weather[0].main, icon:icons[data.weather[0].icon]};
+        let weatherData = {temperature: Math.round(data.main.temp), name: element.innerText, humidity:data.main.humidity, temperature:Math.round(data.main.feels_like), windspeed:Math.round(data.wind.speed), weather:data.weather[0].main, icon:icons[data.weather[0].icon]};
         loadElement(weatherData);
     })
 }
@@ -156,20 +176,12 @@ function createWeatherCard(image, value, item)
     return mainDiv;
 }
 
-function createLi(cityName, className)
+function createLi(cityName, lat, lon, className)
 {
     const li = document.createElement('li');
     li.classList.add(className);
+    li.setAttribute('data-lat', lat);
+    li.setAttribute('data-lon', lon);
     li.innerHTML = cityName;
-    return li;
-}
-
-const icons = {'01d':'icon-clear-day', '01n':'icon-clear-night', '03d':'icon-cloudy', '03n':'icon-cloudy', '02d':'icon-cloudy', '02n':'icon-cloudy', '04d':'icon-cloudy', '04n':'icon-cloudy', '09d':'icon-rain', '09n':'icon-rain', '10d':'icon-rainy-day', '10n':'icon-rainy-night', '11d':'icon-thunderstorm', '11n':'icon-thunderstorm', '13d':'icon-snow', '13n':'icon-snow', '50d':'icon-mist', '50n':'icon-mist'}
-
-function createList(cityData)
-{
-    for(let i = 0; i < cityData.length & i < 5; i++)
-    {
-        result.appendChild(createLi(cityData[i].name, 'search-result')); 
-    }
+    result.appendChild(li);
 }
