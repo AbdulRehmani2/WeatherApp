@@ -7,36 +7,25 @@
     <title>Weather App</title>
 </head>
 <body>
-    <div class="main-container">
-        <div class="weather-container">
-            <h1 class="weather-title">Weather App</h1>
-            <div class="component-container">
-                <div class="search-bar">
-                    <input type="text" placeholder="Enter city name" class="search-input" name="search-city"></input>
-                    <label for="search-city"><button class="search-button"><img src="./assets/search.png" class="search-image"></button></label>
+    <div class="component-container">
+        <div class="weather-card">
+            <div class="weather-info-container">
+                <div class="sprite-container">
+                    <div class="icon"></div>
                 </div>
-                <div class="search-results-container">
-                    <ul class="search-results">
-                    </ul>
+                <div class="weather-temp-info">
+                    <h2></h2>
+                    <p></p>
                 </div>
-                <div class="weather-card">
-                    <div class="weather-info-container">
-                        <div class="sprite-container">
-                            <div class="icon"></div>
-                        </div>
-                        <div class="weather-temp-info">
-                            <h2></h2>
-                            <p></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="weather-card-container">
-                    <div class="weather-location-info">
-                        <img></img>
-                        <h1></h1>
-                    </div>
-                    <div class="weather-cards"></div>
-                </div>
+            </div>
+        </div>
+        <div class="weather-card-container">
+            <div class="weather-location-info">
+                <img></img>
+                <h1></h1>
+            </div>
+            <div class="weather-cards">
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
