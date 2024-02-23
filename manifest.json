@@ -1,0 +1,14 @@
+{
+    "name": "Weather App",
+    "version": "1.0.0",
+    "description": "Get current weather condition of your location.",
+    "manifest_version": 3,
+    "permissions": [
+        "geolocation"
+      ],
+    "author": "Ghazi",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "Latest Weather"
+    }
+}

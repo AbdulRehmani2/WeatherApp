@@ -13,8 +13,6 @@ body{
 }
 
 .weather-info-card,
-.main-container,
-.weather-container,
 .component-container,
 .search-bar,
 .weather-info-container,
@@ -31,6 +29,7 @@ body{
     border-radius: 0.5rem;
     margin: 0.5rem 0rem;
     flex-direction: column;
+    justify-content: center;
 }
 
 .weather-temp-info>h2{
