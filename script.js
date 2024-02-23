@@ -3,7 +3,6 @@ const result = document.querySelector('.search-results');
 const weather = document.querySelector('.weather-card')
 const weatherInfo = document.querySelector('.weather-card-container')
 const myAPIkey = "4201aad943feb7c50d1cb5ad0de0ca52";
-// let parsedData = [];
 const icons = {'01d':'icon-clear-day', 
 '01n':'icon-clear-night', 
 '03d':'icon-cloudy', 
@@ -28,20 +27,20 @@ const icons = {'01d':'icon-clear-day',
 result.classList.add('hide');
 hideWeather();
 
-input.addEventListener('keyup', (e) => {
-    const value = e.target.value.toLowerCase();
-    if(value == "")
-    {
-        clearChildren();
-        return;
-    }
-    if(e.key == 'Enter')
-    {
-        hideWeather();
-        result.classList.remove('hide');
-        getCoordinates(value,  createLi);
-    }
+
+document.querySelector('.search-button').addEventListener('click', () => {
+    const value = input.value.toLowerCase();
+    
+    clearChildren();
+    showOptions(value);
 });
+
+function showOptions(value)
+{
+    hideWeather();
+    result.classList.remove('hide');
+    getCoordinates(value,  createLi);
+}
 
 function showError()
 {

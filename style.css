@@ -99,6 +99,17 @@ body{
     border: none;
 }
 
+.search-button{
+    background-color: transparent;
+    border: none;
+    border-left: 1px solid rgb(207, 207, 207);
+    padding-left: 0.5rem;
+}
+
+.search-button:hover{
+    cursor: pointer;
+}
+
 .weather-temp-info>h2{
     font-size: 3rem;
     margin: 0.3rem 0rem;
