@@ -3,6 +3,7 @@ const result = document.querySelector('.search-results');
 const weather = document.querySelector('.weather-card')
 const weatherInfo = document.querySelector('.weather-card-container')
 const myAPIkey = "4201aad943feb7c50d1cb5ad0de0ca52";
+let cancalCall = null;
 const icons = {'01d':'icon-clear-day', 
 '01n':'icon-clear-night', 
 '03d':'icon-cloudy', 
@@ -27,12 +28,22 @@ const icons = {'01d':'icon-clear-day',
 result.classList.add('hide');
 hideWeather();
 
-
-document.querySelector('.search-button').addEventListener('click', () => {
+function callAPI()
+{
     const value = input.value.toLowerCase();
     
     clearChildren();
     showOptions(value);
+}
+
+input.addEventListener('keyup', () => {
+    cancalCall = setTimeout(callAPI, 300);
+})
+
+input.addEventListener('keydown', () => clearTimeout(cancalCall));
+
+document.querySelector('.search-button').addEventListener('click', () => {
+   callAPI(); 
 });
 
 function showOptions(value)
