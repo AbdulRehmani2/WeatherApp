@@ -77,7 +77,7 @@ function getCoordinates(cityName)
     clearChildren();
     if(cityName == "") return;
     const limit = 5;
-    const url = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=${limit}&appid=${myAPIkey}`
+    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=${limit}&appid=${myAPIkey}`
     fetch(url).then(res => res.json()).then(data => {
         parseData(data);
         result.firstChild == null && showError();
